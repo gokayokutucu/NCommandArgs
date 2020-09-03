@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NCommandArgs.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "-h"
+    }
+  }
+}
