@@ -2,6 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageId>NCommandArgs</PackageId>
+    <Version>1.0.0-preview.0</Version>
+    <Authors>M.Gökay Okutucu</Authors>
+    <Company>Blink</Company>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageTags>NCommandArgs;NDesk.Options;CommandLine;ArgumentParser;Args</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageDescription>Arguments parser of CLI programs(NDeskOptions based)</PackageDescription>
+    <RepositoryUrl>https://github.com/gokayokutucu/NCommandArgs</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
+
 
 </Project>

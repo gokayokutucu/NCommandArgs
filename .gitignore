@@ -32,3 +32,4 @@ msbuild.wrn
 .vs/
 # Visual Studio Code
 .vscode/
+/src/NCommandArgs/Properties/PublishProfiles
