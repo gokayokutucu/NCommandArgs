@@ -10,11 +10,15 @@ namespace NCommandArgs
 {
     public class CommandSet : KeyedCollection<string, Command>
     {
+        private List<string[]> _keyGroups;
         private CommandContext _context;
         public CommandSet(string[] args)
         {
-            _context = new CommandContext(this, args);
+            _context = new CommandContext(this, args.ToList());
         }
+
+        public List<string[]> KeyGroups => _keyGroups;
+
         //private readonly Regex _valueCommand = new Regex("^(?<flag>--|-|/)(?<name>[^:=]+)((?<sep>[:=])(?<value>.*))?$");
         //private const int CommandWidth = 29;
 
@@ -52,6 +56,9 @@ namespace NCommandArgs
         {
             if (command == null)
                 throw new ArgumentNullException(nameof(command));
+            
+            _keyGroups ??= new List<string[]>();
+
             var stringList = new List<string>(command.Names.Length);
             try
             {
@@ -60,11 +67,13 @@ namespace NCommandArgs
                     Dictionary.Add(command.Names[index], command);
                     stringList.Add(command.Names[index]);
                 }
+                _keyGroups.Add(command.Names);
             }
             catch (Exception)
             {
                 foreach (string key in stringList)
                     Dictionary.Remove(key);
+                _keyGroups.Remove(command.Names);
                 throw;
             }
         }
@@ -108,6 +117,7 @@ namespace NCommandArgs
         {
             foreach (var command in _context.CommandSet)
             {
+                var  a= command.Values;
                 if(command.IsPassed)
                     command.Invoke();
             }

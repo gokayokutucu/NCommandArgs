@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageId>NCommandArgs</PackageId>
-    <Version>1.0.0-preview.0</Version>
+    <Version>1.0.0-preview.1</Version>
     <Authors>M.Gökay Okutucu</Authors>
     <Company>Blink</Company>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

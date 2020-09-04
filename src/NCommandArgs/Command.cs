@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace NCommandArgs
 {
-    public delegate void CommandAction<in TKey, in TValue>(TKey key, TValue value);
     public abstract class Command
     {
         private static readonly char[] NameTerminator = new char[2] { '=', ':' };
@@ -34,6 +35,23 @@ namespace NCommandArgs
         }
 
         public string Key => _key;
+
+        public Lazy<IEnumerable<string>> Values
+        {
+            get
+            {
+                var otherKeys = _context.CommandSet.KeyGroups
+                    .Except(new List<string[]>{ Names })
+                    .SelectMany(x => x);
+
+                var values = _context.Args
+                    .SkipWhile(a => !Names.Contains(a))
+                    .Skip(1) //Skip for command
+                    .TakeWhile(k => !otherKeys.Contains(k));
+
+                return new Lazy<IEnumerable<string>>(values);
+            }
+        }
 
         public string Description { get; }
 
@@ -92,15 +110,25 @@ namespace NCommandArgs
             if (_context.Args.Count(a => names.Contains(a)) < 1)
                 throw new IndexOutOfRangeException($"{key} cannot found");
 
-            var keyArgValue = _context.Args.SkipWhile(a => !names.Contains(a)).Skip(1).FirstOrDefault();
-
-            if (keyArgValue == null)
+            if (Values.Value == null || !Values.Value.Any())
                 throw new ArgumentNullException();
 
-            if (!TypeDescriptor.GetConverter(typeof(T)).IsValid(keyArgValue))
+            try
+            {
+                var values = (T)Values.Value;
+
+                if (Values.IsValueCreated && Values.Value.Count() > 1)
+                    return values;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+            if (!TypeDescriptor.GetConverter(typeof(T)).IsValid(Values.Value.FirstOrDefault()!))
                 throw new ArgumentException();
 
-            return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(keyArgValue);
+            return (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(Values.Value.FirstOrDefault());
         }
 
         public override void Invoke()

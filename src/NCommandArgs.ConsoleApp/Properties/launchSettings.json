@@ -2,7 +2,7 @@
   "profiles": {
     "NCommandArgs.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "-h"
+      "commandLineArgs": "init 5794f656-304a-4a0f-bbd0-560a0316e4a0 set \"myMainKey:mySub\" \"myValue\" remove \"lastKey\""
     }
   }
 }

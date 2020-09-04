@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NCommandArgs.ConsoleApp
@@ -12,8 +14,8 @@ namespace NCommandArgs.ConsoleApp
             if (args.Length < 1)
                 throw new ArgumentOutOfRangeException("args", "You must use at least one argument");
 
-            if (args.Length > 2)
-                throw new ArgumentOutOfRangeException("args", "Too much arguments");
+            //if (args.Length > 3)
+            //    throw new ArgumentOutOfRangeException("args", "Too much arguments");
 
             var commandSet = new CommandSet(args)
             {
@@ -27,6 +29,20 @@ namespace NCommandArgs.ConsoleApp
                     {
                         UniqueId = _;
                         Console.WriteLine(UniqueId);
+                    }
+                },
+                {
+                    "set|-s", "Set a key value pair",
+                    (IEnumerable<string> _) =>
+                    {
+                        _.ToList().ForEach(Console.WriteLine);
+                    }
+                },
+                {
+                    "remove|-r", "Remove a key value pair",
+                    (string _) =>
+                    {
+                        Console.WriteLine(_);
                     }
                 },
                 {
